@@ -1,24 +1,35 @@
-const listItems = document.querySelectorAll('.fruit');
-listItems.forEach(li => {
-    const btn = document.createElement('button');
-    btn.textContent = 'Edit';
-    li.appendChild(btn);
-});
-
 const form = document.querySelector('form');
-const fruits = document.querySelector('.fruits');
+const fruitsInput = document.getElementById('fruit-to-add');
+const fruitsList = document.getElementsByClassName('fruits')[0];
+const existingItems = fruitsList.querySelectorAll('li');
 
-form.addEventListener('submit', function (event) {
-    event.preventDefault();
-    const fruitToAdd = document.getElementById('fruit-to-add');
-    const newLi = document.createElement('li');
-    newLi.innerHTML = fruitToAdd.value + '<button class="delete-btn">x</button>' + '<button>Edit</button>';
-    fruits.appendChild(newLi);
+
+existingItems.forEach(item => {
+    const editBtn = document.createElement('button');
+    editBtn.textContent = 'Edit';
+    item.appendChild(editBtn);
 });
-fruits.addEventListener('click', function (event) {
+
+form.addEventListener('submit', function(event) {
+    event.preventDefault();
+    const fruitName = fruitsInput.value.trim();
+    if (fruitName === ' ')
+        return;
+    const newLi = document.createElement('li');
+    newLi.className = 'fruit';
+    newLi.innerHTML = `
+    ${fruitName}
+    <button class="delete-btn">x</button> 
+    <button class="edit-btn'>Edit</button>
+    `;
+
+    fruitsList.appendChild(newLi);
+    fruitsList.value = '';
+});
+fruitsList.addEventListener('click', function (event) {
     if (event.target.classList.contains('delete-btn'))
     {
-        const fdelete = event.target.parentElement;
-        fruits.removeChild(fdelete);
-    };
+        const li = event.target.parentElement;
+        fruitsList.removeChild(li);
+    }
 });
